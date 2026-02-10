@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1770755136 source:c:\users\lauti\onedrive\desktop\juegop\memotest\main.c
+1770759789 source:c:\users\lauti\onedrive\desktop\juegop\memotest\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -463,24 +463,43 @@
 	"begin_code.h"
 	"close_code.h"
 
-1770758322 source:c:\users\lauti\onedrive\desktop\juegop\memotest\dibujo.c
+1770760192 source:c:\users\lauti\onedrive\desktop\juegop\memotest\dibujo.c
 	"dibujo.h"
 
-1770754848 c:\users\lauti\onedrive\desktop\juegop\memotest\configuracion.h
+1770759722 c:\users\lauti\onedrive\desktop\juegop\memotest\configuracion.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
 
-1770755058 c:\users\lauti\onedrive\desktop\juegop\memotest\dibujo.h
+1770760108 c:\users\lauti\onedrive\desktop\juegop\memotest\dibujo.h
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
 
-1770755078 source:c:\users\lauti\onedrive\desktop\juegop\memotest\configuracion.c
+1770759722 source:c:\users\lauti\onedrive\desktop\juegop\memotest\configuracion.c
 	"configuracion.h"
 	<string.h>
 	<time.h>
 	<stdio.h>
 	<stdlib.h>
 	"dibujo.h"
+
+1770759494 source:c:\users\lauti\onedrive\desktop\juegop\memotest\juego.c
+	"juego.h"
+	<stdlib.h>
+	<stdio.h>
+
+1770759493 c:\users\lauti\onedrive\desktop\juegop\memotest\juego.h
+	<SDL2/SDL.h>
+	"configuracion.h"
+	"vector.h"
+
+1770759479 c:\users\lauti\onedrive\desktop\juegop\memotest\vector.h
+	<stddef.h>
+
+1770759492 source:c:\users\lauti\onedrive\desktop\juegop\memotest\vector.c
+	"vector.h"
+	<stdlib.h>
+	<string.h>
+	<time.h>
 

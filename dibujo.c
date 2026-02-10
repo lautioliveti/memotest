@@ -18,7 +18,8 @@ void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_
     SDL_RenderPresent(renderer);
 
 
-    SDL_Delay(2000);
+    esperar(2000);
+
 }
 
 
@@ -29,5 +30,18 @@ void mostrarTexto(SDL_Renderer *renderer, char *mensaje, TTF_Font *font, int x, 
     SDL_RenderCopy(renderer, tex, NULL, &rect);
     SDL_FreeSurface(surf);
     SDL_DestroyTexture(tex);
+}
+
+void esperar(int duracion)
+{
+    SDL_Event e;
+    size_t inicio = SDL_GetTicks();
+    while (SDL_GetTicks() - inicio < duracion)
+    {
+        while (SDL_PollEvent(&e))
+            {
+
+            }
+    }
 }
 
