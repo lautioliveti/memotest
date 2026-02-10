@@ -107,10 +107,13 @@ int mostrarMenuConfiguracion(SDL_Renderer* renderer, SDL_Texture* texturaFondo, 
 
     SDL_Rect fIzqDim = {500, 180,50,80},
     fDerDim = {640, 180, 50,80};
+
     SDL_Rect fIzqSet = {500, 260, 50,80},
     fDerSet = {640, 260, 50,80};
+
     SDL_Rect fIzqJug = {500, 340, 50,80},
     fDerJug = {640, 340, 50,80};
+
     SDL_Rect btnGuardar = {420, 480, 200, 60};
     SDL_Rect btnVolver = {180, 480, 200, 60};
 

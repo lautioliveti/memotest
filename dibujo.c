@@ -1,4 +1,3 @@
-
 #include "dibujo.h"
 
 void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo) {
