@@ -6,20 +6,25 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "configuracion.h"
 #include "dibujo.h"
 #include "juego.h"
+#include "sonido.h"
 
 int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo,TTF_Font *font);
 
 int main(int argc, char* argv[]) {
     srand(time(NULL));
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
         return -1;
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     TTF_Init();
+    if (inicializarSonido() < 0) {
+        printf("Advertencia: No se pudo inicializar el sonido\n");
+    }
 
     SDL_Window *ventana = SDL_CreateWindow("MemoTest - UNLaM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(ventana, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -44,10 +49,13 @@ int main(int argc, char* argv[]) {
 
     Jugador j1, j2;
 
+    EfectosSonido efectos;
+    cargarEfectosSonido(&efectos);
+
     int estadoActual = MENU;
     int corriendo = 1;
 
-    mostrarPresentacion(renderer, texturaFondo, texturaTitulo);
+    mostrarPresentacion(renderer, texturaFondo, texturaTitulo,font);
 
     while (corriendo) {
         switch (estadoActual) {
@@ -70,7 +78,7 @@ int main(int argc, char* argv[]) {
                     solicitarNombreJugador(renderer, texturaFondo, &j2, font, 2);
                 }
 
-                estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font);
+                estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos);
 
                 estadoActual = MENU;
                 break;

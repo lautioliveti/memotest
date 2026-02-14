@@ -63,9 +63,6 @@ int redimensionarVector(Vector* v, size_t capMinima)
 
 int insertarFinalVector(Vector* v, const void* elem)
 {
-    if (!v || !elem)
-        return -1;
-
     if (v->ce == v->cap)
     {
         if (redimensionarVector(v, v->cap + 1) != 0)

@@ -19,7 +19,7 @@ typedef struct {
     int mejorRacha;
     int intentos;// cada 2 selecciones = 1 intento
     int cantEncontrados;// pares acertados
-    Uint32 startTimeMs; //REVISAR SI VA (me lo dijo chatgpt)
+    Uint32 startTimeMs;
 }Estadisticas;
 
 
@@ -33,7 +33,9 @@ typedef struct {
     int segundoIndice;// -1 si nada
 
     int ocultar;// hay que ocultar por fallo
-    Uint32 hideAtMs;// momento para ocultar. REVISAR SI VA (me lo dijo chatgpt)
+    Uint32 hideAtMs;// momento para ocultar
+
+    int racha;// racha de aciertos consecutivos
 }Tablero;
 
 typedef struct {

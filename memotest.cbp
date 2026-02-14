@@ -64,6 +64,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="dibujo.h" />
+		<Unit filename="juego.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="juego.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

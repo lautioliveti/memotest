@@ -19,13 +19,14 @@ int cargarTexturasCartas(SDL_Renderer *renderer, TexturasCartas *tc, int setDeCa
         return -1;
     }
 
-    // Determinar carpeta según el set
-    const char* carpeta = (setDeCartas == SET_A) ? "img/setA" : "img/setB";
+    // CAMBIO: Ahora todas las imágenes están directamente en img/
+    // Usar sufijo A o B para diferenciar sets
+    const char sufijo = (setDeCartas == SET_A) ? 'A' : 'B';
 
     // Cargar cada textura de figura
     for (int i = 0; i < numPares; i++) {
         char ruta[256];
-        sprintf(ruta, "%s/carta%d.png", carpeta, i);
+        sprintf(ruta, "img/carta%d%c.png", i, sufijo);
         tc->texturas[i] = IMG_LoadTexture(renderer, ruta);
 
         if (!tc->texturas[i]) {
@@ -103,12 +104,11 @@ void dibujarTablero(SDL_Renderer *renderer, Tablero *tablero,
     }
 }
 
-void dibujarHUD(SDL_Renderer *renderer, TTF_Font *font, Jugador *j1, Jugador *j2,
-                int jugadorActual, int cantJugadores, int paresEncontrados, int totalPares) {
+void dibujarHUD(SDL_Renderer *renderer, TTF_Font *font, Jugador *j1, Jugador *j2,int jugadorActual, int cantJugadores, int paresEncontrados, int totalPares, int racha) {
 
     SDL_Color blanco = {255, 255, 255, 255};
-    SDL_Color naranja = {255, 150, 60, 255};
     SDL_Color verde = {100, 255, 100, 255};
+    SDL_Color dorado = {255, 215, 0, 255};
 
     // Fondo del HUD
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -125,17 +125,19 @@ void dibujarHUD(SDL_Renderer *renderer, TTF_Font *font, Jugador *j1, Jugador *j2
     // Información jugador 2 (si existe)
     if (cantJugadores == 2) {
         sprintf(texto, "%s: %d pts", j2->nombre, j2->puntaje);
-        mostrarTexto(renderer, texto, font, 400, 15,
+        mostrarTexto(renderer, texto, font, 580, 15,
                      (jugadorActual == 1) ? verde : blanco);
     }
 
-    // Progreso
-    sprintf(texto, "Pares: %d/%d", paresEncontrados, totalPares);
-    mostrarTexto(renderer, texto, font, 650, 15, naranja);
+    // Mostrar racha si es mayor a 0
+    if (racha > 0) {
+        sprintf(texto, "Racha: %d", racha);
+        mostrarTexto(renderer, texto, font, 320, 15, dorado);
+    }
 }
 
-int obtenerCartaCliqueada(int mouseX, int mouseY, Tablero *tablero,
-                          int offsetX, int offsetY, int anchoC, int altoC) {
+int obtenerCartaCliqueada(int mouseX, int mouseY, Tablero *tablero,int offsetX, int offsetY, int anchoC, int altoC)
+{
     for (int i = 0; i < tablero->filas; i++) {
         for (int j = 0; j < tablero->columnas; j++) {
             SDL_Rect cartaRect = {
@@ -153,7 +155,7 @@ int obtenerCartaCliqueada(int mouseX, int mouseY, Tablero *tablero,
     return -1;
 }
 
-void procesarSeleccion(Tablero *tablero, int indice, Jugador *jugadorActivo, int *jugadorActual, int cantJugadores) {
+void procesarSeleccion(Tablero *tablero, int indice, Jugador *jugadorActivo, int *jugadorActual, int cantJugadores,EfectosSonido *efectos) {
     Figura *f = (Figura*)obtenerVector(&tablero->figuras, indice);
 
     // No permitir seleccionar cartas ya encontradas o reveladas
@@ -166,6 +168,7 @@ void procesarSeleccion(Tablero *tablero, int indice, Jugador *jugadorActivo, int
         // Primera carta seleccionada
         tablero->primerIndice = indice;
         f->estado = REVELADA;
+        reproducirSonido(efectos->seleccion);
     } else if (tablero->segundoIndice == -1 && indice != tablero->primerIndice) {
         // Segunda carta seleccionada
         tablero->segundoIndice = indice;
@@ -179,9 +182,18 @@ void procesarSeleccion(Tablero *tablero, int indice, Jugador *jugadorActivo, int
             // ¡Pareja encontrada!
             f1->estado = ENCONTRADA;
             f2->estado = ENCONTRADA;
+            reproducirSonido(efectos->acierto);
 
             // Sumar puntos
             jugadorActivo->puntaje += f1->puntos;
+
+            // Incrementar racha
+            tablero->racha++;
+
+            // Bonus por racha de 3 aciertos consecutivos
+            if (tablero->racha >= 3) {
+                jugadorActivo->puntaje += 10;
+            }
 
             // Resetear para nueva selección
             tablero->primerIndice = -1;
@@ -193,6 +205,16 @@ void procesarSeleccion(Tablero *tablero, int indice, Jugador *jugadorActivo, int
             // No coinciden - programar para ocultar
             tablero->ocultar = 1;
             tablero->hideAtMs = SDL_GetTicks() + 1000; // 1 segundo para ver las cartas
+            reproducirSonido(efectos->error);
+
+            // NUEVO: Restar puntos por error (5 puntos)
+            jugadorActivo->puntaje -= 5;
+            if (jugadorActivo->puntaje < 0) {
+                jugadorActivo->puntaje = 0; // No permitir puntajes negativos
+            }
+
+            // Resetear racha por fallo
+            tablero->racha = 0;
         }
     }
 }
@@ -228,7 +250,7 @@ int contarParesEncontrados(Tablero *tablero) {
 }
 
 int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo,
-                 Configuracion *cfg, Jugador *j1, Jugador *j2, TTF_Font *font) {
+                 Configuracion *cfg, Jugador *j1, Jugador *j2, TTF_Font *font,EfectosSonido *efectos) {
 
     // Inicializar tablero
     Tablero tablero;
@@ -274,14 +296,13 @@ int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo,
             }
 
             if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
-                int cartaIdx = obtenerCartaCliqueada(mouseX, mouseY, &tablero,
-                                                     offsetX, offsetY, anchoC, altoC);
+                int cartaIdx = obtenerCartaCliqueada(mouseX, mouseY, &tablero,offsetX, offsetY, anchoC, altoC);
 
                 if (cartaIdx != -1) {
                     Jugador *jugadorActivo = (jugadorActual == 0) ? j1 : j2;
 
                     int paresAntes = contarParesEncontrados(&tablero);
-                    procesarSeleccion(&tablero, cartaIdx, jugadorActivo, &jugadorActual, cfg->cantJugadores);
+                    procesarSeleccion(&tablero, cartaIdx, jugadorActivo, &jugadorActual, cfg->cantJugadores,efectos);
                     int paresDespues = contarParesEncontrados(&tablero);
 
                     // Cambiar turno en modo 2 jugadores si falló
@@ -324,7 +345,7 @@ int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo,
         SDL_RenderCopy(renderer, texturaFondo, NULL, NULL);
 
         dibujarTablero(renderer, &tablero, &tc, offsetX, offsetY, anchoC, altoC, mouseX, mouseY);
-        dibujarHUD(renderer, font, j1, j2, jugadorActual, cfg->cantJugadores, paresEncontrados, tablero.numPares);
+        dibujarHUD(renderer, font, j1, j2, jugadorActual, cfg->cantJugadores, paresEncontrados, tablero.numPares, tablero.racha);
 
         // Mostrar mensaje de victoria
         if (paresEncontrados == tablero.numPares) {
@@ -343,17 +364,17 @@ int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo,
             } else {
                 char msg[100];
                 if (j1->puntaje > j2->puntaje) {
-                    sprintf(msg, "¡Gana %s!", j1->nombre);
+                    sprintf(msg, "Gana %s", j1->nombre);
                 } else if (j2->puntaje > j1->puntaje) {
-                    sprintf(msg, "¡Gana %s!", j2->nombre);
+                    sprintf(msg, "Gana %s", j2->nombre);
                 } else {
-                    sprintf(msg, "¡Empate!");
+                    sprintf(msg, "Empate");
                 }
                 mostrarTexto(renderer, msg, font, 300, 290, dorado);
 
             }
 
-            SDL_Color blanco = {255, 255, 255, 255};
+
             SDL_RenderPresent(renderer);
             esperar(5000);
 

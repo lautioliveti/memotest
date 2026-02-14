@@ -1,25 +1,28 @@
 #include "dibujo.h"
 
-void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo) {
+void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo, TTF_Font *font) {
     // posicion y dimension del titulo
-    int x = 150, y= 200, w = 500, h = 180;
-
-
+    SDL_Color blanco = {255, 255, 255, 255};
     SDL_RenderClear(renderer);
-
-
     SDL_RenderCopy(renderer, texturaFondo, NULL, NULL);
-
-
-    SDL_Rect rectTitulo = { x, y, w, h };
+    SDL_Rect rectTitulo = { 150, 150, 500, 180 };
     SDL_RenderCopy(renderer, texturaTitulo, NULL, &rectTitulo);
+    mostrarTexto(renderer,"Presiona una tecla para empezar", font,140,350,blanco);
 
+    SDL_Event e;
+    int corriendo=1;
 
-    SDL_RenderPresent(renderer);
+    while(corriendo)
+    {
+        while(SDL_PollEvent(&e))
+        {
+            if (e.type == SDL_KEYDOWN) {
+                corriendo = 0;
+            }
+        }
+        SDL_RenderPresent(renderer);
 
-
-    esperar(2000);
-
+    }
 }
 
 
