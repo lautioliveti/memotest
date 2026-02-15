@@ -12,6 +12,7 @@
 #include "dibujo.h"
 #include "juego.h"
 #include "sonido.h"
+#include "estadisticas.h"
 
 int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo,TTF_Font *font);
 
@@ -48,6 +49,12 @@ int main(int argc, char* argv[]) {
     cargarConfiguracion(&miConfig); // inicializo config
 
     Jugador j1, j2;
+    // Inicializar Top 10 de la sesion
+    TopSesion topSesion;
+    if (inicializarTopSesion(&topSesion) != 0) {
+        printf("Error inicializando estadisticas\n");
+        return -1;
+    }
 
     EfectosSonido efectos;
     cargarEfectosSonido(&efectos);
@@ -80,13 +87,18 @@ int main(int argc, char* argv[]) {
 
                 estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos);
 
+                agregarEntradaTop(&topSesion, j1.nombre, j1.puntaje);
+                if (miConfig.cantJugadores == 2) {
+                    agregarEntradaTop(&topSesion, j2.nombre, j2.puntaje);
+                }
+
                 estadoActual = MENU;
                 break;
 
             case ESTADISTICAS:
                 // logica de estadisticas
 
-                estadoActual = MENU;
+                estadoActual = mostrarEstadisticas(renderer, texturaFondo, &topSesion, font, font);
                 break;
 
             case SALIR:

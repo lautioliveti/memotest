@@ -1480,7 +1480,7 @@
 1771051623 source:c:\users\lauti\onedrive\desktop\memotest-main\dibujo.c
 	"dibujo.h"
 
-1771059009 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
+1771189412 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -1493,6 +1493,7 @@
 	"dibujo.h"
 	"juego.h"
 	"sonido.h"
+	"estadisticas.h"
 
 1771047993 source:c:\users\lauti\onedrive\desktop\memotest-main\modelo.c
 	"modelo.h"
@@ -1544,4 +1545,16 @@
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1771189154 source:c:\users\lauti\onedrive\desktop\memotest-main\estadisticas.c
+	"estadisticas.h"
+	"dibujo.h"
+	<string.h>
+	<stdio.h>
+
+1771188748 c:\users\lauti\onedrive\desktop\memotest-main\estadisticas.h
+	"configuracion.h"
+	"Vector.h"
+	<SDL2/SDL.h>
+	<SDL2/SDL_ttf.h>
 
