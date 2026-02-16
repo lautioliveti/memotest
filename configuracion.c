@@ -71,12 +71,25 @@ void solicitarNombreJugador(SDL_Renderer *renderer, SDL_Texture *texturaFondo, J
         mostrarTexto(renderer, etiquetaJugador, font, 320, 180, colorTierra);
         mostrarTexto(renderer, "Ingresar nombre:", font, 250, 230, colorBlanco);
 
+        /// Le agregué esto para que el nombre se vaya centrando a medida que lo vas escribiendo
+        char* textoMostrar = (strlen(nombreTemp) > 0) ? nombreTemp : "...";
 
+        int textW, textH;
+        TTF_SizeText(font, textoMostrar, &textW, &textH);
+
+        int centroX = overlay.x + overlay.w / 2;
+        int posX = centroX - textW / 2;
+
+        mostrarTexto(renderer, textoMostrar, font, posX, 300, colorTierra);
+
+        /// Lo de arriba reemplaza esta parte
+        /*
         if (strlen(nombreTemp) > 0) {
             mostrarTexto(renderer, nombreTemp, font, 370, 300, colorTierra);
         } else {
             mostrarTexto(renderer, "...", font, 370, 300, colorTierra);
         }
+        */
 
 
         if (SDL_PointInRect(&p, &btnSiguiente)) {

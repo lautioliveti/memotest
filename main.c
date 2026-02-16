@@ -16,14 +16,16 @@
 
 int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo,TTF_Font *font);
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     srand(time(NULL));
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
         return -1;
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     TTF_Init();
-    if (inicializarSonido() < 0) {
+    if (inicializarSonido() < 0)
+    {
         printf("Advertencia: No se pudo inicializar el sonido\n");
     }
 
@@ -51,7 +53,8 @@ int main(int argc, char* argv[]) {
     Jugador j1, j2;
     // Inicializar Top 10 de la sesion
     TopSesion topSesion;
-    if (inicializarTopSesion(&topSesion) != 0) {
+    if (inicializarTopSesion(&topSesion) != 0)
+    {
         printf("Error inicializando estadisticas\n");
         return -1;
     }
@@ -64,50 +67,67 @@ int main(int argc, char* argv[]) {
 
     mostrarPresentacion(renderer, texturaFondo, texturaTitulo,font);
 
-    while (corriendo) {
-        switch (estadoActual) {
-            case MENU:
+    ///
+    TopSesion top;
+    if (inicializarTopSesion(&top) != 0)
+    {
+        printf("Error inicializando estadisticas\n");
+        return -1;
+    }
+    cargarTopDesdeArchivo(&top, "top10.dat");
 
-                estadoActual = mostrarMenuInicial(renderer, texturaFondo, texturaTitulo, font);
-                break;
+    ///
 
-            case CONFIGURACION:
+    while (corriendo)
+    {
+        switch (estadoActual)
+        {
+        case MENU:
 
-                estadoActual = mostrarMenuConfiguracion(renderer, texturaFondo, &miConfig, font, texFlechaIzq, texFlechaDer);
+            estadoActual = mostrarMenuInicial(renderer, texturaFondo, texturaTitulo, font);
+            break;
 
-                break;
+        case CONFIGURACION:
 
-            case JUGAR:
+            estadoActual = mostrarMenuConfiguracion(renderer, texturaFondo, &miConfig, font, texFlechaIzq, texFlechaDer);
 
-                solicitarNombreJugador(renderer, texturaFondo, &j1, font, 1);
+            break;
 
-                if (miConfig.cantJugadores == 2) {
-                    solicitarNombreJugador(renderer, texturaFondo, &j2, font, 2);
-                }
+        case JUGAR:
 
-                estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos);
+            solicitarNombreJugador(renderer, texturaFondo, &j1, font, 1);
 
-                agregarEntradaTop(&topSesion, j1.nombre, j1.puntaje);
-                if (miConfig.cantJugadores == 2) {
-                    agregarEntradaTop(&topSesion, j2.nombre, j2.puntaje);
-                }
+            if (miConfig.cantJugadores == 2)
+            {
+                solicitarNombreJugador(renderer, texturaFondo, &j2, font, 2);
+            }
 
-                estadoActual = MENU;
-                break;
+            estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos,&top,&miConfig);
 
-            case ESTADISTICAS:
-                // logica de estadisticas
+            agregarEntradaTop(&topSesion, j1.nombre, j1.puntaje);
+            if (miConfig.cantJugadores == 2)
+            {
+                agregarEntradaTop(&topSesion, j2.nombre, j2.puntaje);
+            }
 
-                estadoActual = mostrarEstadisticas(renderer, texturaFondo, &topSesion, font, font);
-                break;
+            estadoActual = MENU;
+            break;
 
-            case SALIR:
+        case ESTADISTICAS:
+            // logica de estadisticas
+            estadoActual = mostrarEstadisticas(renderer, texturaFondo, &top, font, font);
 
-                corriendo = 0;
-                break;
+            break;
+
+        case SALIR:
+
+            corriendo = 0;
+            break;
         }
     }
 
+    guardarTopEnArchivo(&top, "top10.dat");
+    destruirTopSesion(&top);
 
     SDL_DestroyTexture(texturaFondo);
     SDL_DestroyTexture(texturaTitulo);
@@ -121,7 +141,8 @@ int main(int argc, char* argv[]) {
 }
 
 
-int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo,TTF_Font *font) {
+int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo,TTF_Font *font)
+{
     int modo = -1;
     int corriendo = 1;
     SDL_Event e;
@@ -139,17 +160,20 @@ int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Te
     SDL_Color colRojo = { 150, 40, 30, 255 };
     SDL_Color colRojoH = { 200, 50, 40, 255 };
 
-    while(corriendo) {
+    while(corriendo)
+    {
         SDL_GetMouseState(&mX, &mY);
         SDL_Point p = {mX, mY};
 
-        while(SDL_PollEvent(&e)) {
+        while(SDL_PollEvent(&e))
+        {
             if(e.type == SDL_QUIT)
             {
                 modo = SALIR;
                 corriendo = 0;
             }
-            if(e.type == SDL_MOUSEBUTTONDOWN) {
+            if(e.type == SDL_MOUSEBUTTONDOWN)
+            {
                 if (SDL_PointInRect(&p, &btnJugar))
                 {
                     modo = CONFIGURACION;
@@ -181,18 +205,18 @@ int mostrarMenuInicial(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Te
 
 
         SDL_SetRenderDrawColor(renderer, SDL_PointInRect(&p, &btnJugar) ? colTierraH.r : colTierra.r,
-                                          SDL_PointInRect(&p, &btnJugar) ? colTierraH.g : colTierra.g,
-                                          SDL_PointInRect(&p, &btnJugar) ? colTierraH.b : colTierra.b, 255);
+                               SDL_PointInRect(&p, &btnJugar) ? colTierraH.g : colTierra.g,
+                               SDL_PointInRect(&p, &btnJugar) ? colTierraH.b : colTierra.b, 255);
         SDL_RenderFillRect(renderer, &btnJugar);
 
         SDL_SetRenderDrawColor(renderer, SDL_PointInRect(&p, &btnEstadisticas) ? colTierraH.r : colTierra.r,
-                                          SDL_PointInRect(&p, &btnEstadisticas) ? colTierraH.g : colTierra.g,
-                                          SDL_PointInRect(&p, &btnEstadisticas) ? colTierraH.b : colTierra.b, 255);
+                               SDL_PointInRect(&p, &btnEstadisticas) ? colTierraH.g : colTierra.g,
+                               SDL_PointInRect(&p, &btnEstadisticas) ? colTierraH.b : colTierra.b, 255);
         SDL_RenderFillRect(renderer, &btnEstadisticas);
 
         SDL_SetRenderDrawColor(renderer, SDL_PointInRect(&p, &btnSalir) ? colRojoH.r : colRojo.r,
-                                          SDL_PointInRect(&p, &btnSalir) ? colRojoH.g : colRojo.g,
-                                          SDL_PointInRect(&p, &btnSalir) ? colRojoH.b : colRojo.b, 255);
+                               SDL_PointInRect(&p, &btnSalir) ? colRojoH.g : colRojo.g,
+                               SDL_PointInRect(&p, &btnSalir) ? colRojoH.b : colRojo.b, 255);
         SDL_RenderFillRect(renderer, &btnSalir);
 
         mostrarTexto(renderer, "JUGAR", font, btnJugar.x + 95, btnJugar.y + 8, colTexto);

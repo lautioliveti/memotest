@@ -64,6 +64,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="dibujo.h" />
+		<Unit filename="estadisticas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="estadisticas.h" />
 		<Unit filename="juego.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -75,6 +79,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="modelo.h" />
+		<Unit filename="sonido.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sonido.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

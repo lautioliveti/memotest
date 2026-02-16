@@ -7,6 +7,7 @@
 #include "modelo.h"
 #include "sonido.h"
 #include "configuracion.h"
+#include "estadisticas.h"
 
 // Estructura para almacenar texturas de cartas
 typedef struct {
@@ -16,7 +17,8 @@ typedef struct {
 } TexturasCartas;
 
 // Funciones principales del juego
-int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo, Configuracion *cfg, Jugador *j1, Jugador *j2, TTF_Font *font,EfectosSonido *efectos);
+int jugarPartida(SDL_Renderer *renderer, SDL_Texture *texturaFondo,
+                 Configuracion *cfg, Jugador *j1, Jugador *j2, TTF_Font *font,EfectosSonido *efectos, TopSesion* top, Configuracion* miConfig);
 
 // Funciones de carga de recursos
 int cargarTexturasCartas(SDL_Renderer *renderer, TexturasCartas *tc, int setDeCartas, int numPares);

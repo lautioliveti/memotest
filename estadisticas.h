@@ -25,7 +25,11 @@ int agregarEntradaTop(TopSesion* top, const char* nombre, int puntaje);
 void ordenarTop(TopSesion* top);
 
 // Funcion para mostrar el Top 10
-int mostrarEstadisticas(SDL_Renderer* renderer, SDL_Texture* texturaFondo, 
+int mostrarEstadisticas(SDL_Renderer* renderer, SDL_Texture* texturaFondo,
                         TopSesion* top, TTF_Font* font, TTF_Font* fontSmall);
+
+// Funciones de archivos para estadísticas
+int cargarTopDesdeArchivo(TopSesion* top, const char* path);
+int guardarTopEnArchivo(const TopSesion* top, const char* path);
 
 #endif // ESTADISTICAS_H_INCLUDED

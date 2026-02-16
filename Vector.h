@@ -22,6 +22,7 @@ int tamVector(const Vector* v);
 void* obtenerVector(Vector* v, int index);
 int redimensionarVector(Vector* v, size_t capMinima);
 int insertarFinalVector(Vector* v, const void* elem);
+void vaciarVector(Vector* v);
 
 
 #endif // VECTOR_H_INCLUDED

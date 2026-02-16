@@ -77,3 +77,8 @@ int insertarFinalVector(Vector* v, const void* elem)
     v->ce++;
     return 0;
 }
+
+void vaciarVector(Vector* v) {
+    if (!v) return;
+    v->ce = 0;
+}
