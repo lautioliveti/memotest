@@ -1477,10 +1477,11 @@
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
 
-1771227909 source:c:\users\lauti\onedrive\desktop\memotest-main\dibujo.c
+1771287543 source:c:\users\lauti\onedrive\desktop\memotest-main\dibujo.c
 	"dibujo.h"
+	"sonido.h"
 
-1771227909 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
+1771287552 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -1530,7 +1531,7 @@
 	<stdlib.h>
 	<string.h>
 
-1771058430 source:c:\users\lauti\onedrive\desktop\memotest-main\sonido.c
+1771227902 source:c:\users\lauti\onedrive\desktop\memotest-main\sonido.c
 	"sonido.h"
 	<stdio.h>
 
@@ -1547,7 +1548,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1771189154 source:c:\users\lauti\onedrive\desktop\memotest-main\estadisticas.c
+1771227909 source:c:\users\lauti\onedrive\desktop\memotest-main\estadisticas.c
 	"estadisticas.h"
 	"dibujo.h"
 	<string.h>

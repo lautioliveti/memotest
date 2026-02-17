@@ -62,8 +62,10 @@ int main(int argc, char* argv[])
     EfectosSonido efectos;
     cargarEfectosSonido(&efectos);
 
+
     int estadoActual = MENU;
     int corriendo = 1;
+
 
     mostrarPresentacion(renderer, texturaFondo, texturaTitulo,font);
 
@@ -82,47 +84,47 @@ int main(int argc, char* argv[])
     {
         switch (estadoActual)
         {
-        case MENU:
+            case MENU:
 
-            estadoActual = mostrarMenuInicial(renderer, texturaFondo, texturaTitulo, font);
-            break;
+                estadoActual = mostrarMenuInicial(renderer, texturaFondo, texturaTitulo, font);
+                break;
 
-        case CONFIGURACION:
+            case CONFIGURACION:
 
-            estadoActual = mostrarMenuConfiguracion(renderer, texturaFondo, &miConfig, font, texFlechaIzq, texFlechaDer);
+                estadoActual = mostrarMenuConfiguracion(renderer, texturaFondo, &miConfig, font, texFlechaIzq, texFlechaDer);
 
-            break;
+                break;
 
-        case JUGAR:
+            case JUGAR:
 
-            solicitarNombreJugador(renderer, texturaFondo, &j1, font, 1);
+                solicitarNombreJugador(renderer, texturaFondo, &j1, font, 1);
 
-            if (miConfig.cantJugadores == 2)
-            {
-                solicitarNombreJugador(renderer, texturaFondo, &j2, font, 2);
-            }
+                if (miConfig.cantJugadores == 2)
+                {
+                    solicitarNombreJugador(renderer, texturaFondo, &j2, font, 2);
+                }
 
-            estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos,&top,&miConfig);
+                estadoActual = jugarPartida(renderer, texturaFondo, &miConfig, &j1, &j2, font,&efectos,&top,&miConfig);
 
-            agregarEntradaTop(&topSesion, j1.nombre, j1.puntaje);
-            if (miConfig.cantJugadores == 2)
-            {
-                agregarEntradaTop(&topSesion, j2.nombre, j2.puntaje);
-            }
+                agregarEntradaTop(&topSesion, j1.nombre, j1.puntaje);
+                if (miConfig.cantJugadores == 2)
+                {
+                    agregarEntradaTop(&topSesion, j2.nombre, j2.puntaje);
+                }
 
-            estadoActual = MENU;
-            break;
+                estadoActual = MENU;
+                break;
 
-        case ESTADISTICAS:
-            // logica de estadisticas
-            estadoActual = mostrarEstadisticas(renderer, texturaFondo, &top, font, font);
+            case ESTADISTICAS:
+                // logica de estadisticas
+                estadoActual = mostrarEstadisticas(renderer, texturaFondo, &top, font, font);
 
-            break;
+                break;
 
-        case SALIR:
+            case SALIR:
 
-            corriendo = 0;
-            break;
+                corriendo = 0;
+                break;
         }
     }
 
@@ -134,9 +136,11 @@ int main(int argc, char* argv[])
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(ventana);
     TTF_CloseFont(font);
+
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+
     return 0;
 }
 

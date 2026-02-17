@@ -1,4 +1,5 @@
 #include "dibujo.h"
+#include "sonido.h"
 
 void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_Texture *texturaTitulo, TTF_Font *font) {
     // posicion y dimension del titulo
@@ -12,6 +13,7 @@ void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_
     SDL_Event e;
     int corriendo=1;
 
+
     while(corriendo)
     {
         while(SDL_PollEvent(&e))
@@ -21,8 +23,8 @@ void mostrarPresentacion(SDL_Renderer *renderer, SDL_Texture *texturaFondo, SDL_
             }
         }
         SDL_RenderPresent(renderer);
-
     }
+
 }
 
 
