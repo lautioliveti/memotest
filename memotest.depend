@@ -1477,11 +1477,11 @@
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
 
-1771287543 source:c:\users\lauti\onedrive\desktop\memotest-main\dibujo.c
+1771292699 source:c:\users\lauti\onedrive\desktop\memotest-main\dibujo.c
 	"dibujo.h"
 	"sonido.h"
 
-1771287552 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
+1771292699 source:c:\users\lauti\onedrive\desktop\memotest-main\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
